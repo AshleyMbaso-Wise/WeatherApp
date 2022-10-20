@@ -1,16 +1,21 @@
 package com.example.weatherapp.models
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.models.WeatherPost
 
 
-class WeatherListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeatherListAdapter(
+    val context: Context
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var weatherItems: List<WeatherPost> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,11 +52,17 @@ class WeatherListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     ): RecyclerView.ViewHolder(itemView){
         val weatherLocation  = itemView.findViewById<TextView>(R.id.location_text)
         val weatherTemperature = itemView.findViewById<TextView>(R.id.temperate_text)
+        val weatherButton = itemView.findViewById<Button>(R.id.DetailsButton)
 
         fun bind(weatherPostItem: WeatherPost){
             weatherLocation.setText(weatherPostItem.city)
             weatherTemperature.setText(weatherPostItem.temperature)
+            weatherButton.setOnClickListener{
+                val intent = Intent(context,DetailsActivity::class.java)
+                context.startActivity(intent)
+            }
         }
+
     }
 
 
