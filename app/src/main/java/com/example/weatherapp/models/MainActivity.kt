@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var weatherAdapter: WeatherListAdapter

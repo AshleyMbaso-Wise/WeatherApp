@@ -14,22 +14,12 @@
         android:orientation="vertical"
         >
 
-        <LinearLayout
-            android:id="@+id/testid"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:background="@color/WeatherApp_MainGreen"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weather_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="80"
             android:background="@color/teal_700"
-            android:id="@+id/weather_recycler_view"
 
             />
 

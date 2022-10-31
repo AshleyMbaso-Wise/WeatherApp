@@ -58,7 +58,8 @@ class WeatherListAdapter(
             weatherLocation.setText(weatherPostItem.city)
             weatherTemperature.setText(weatherPostItem.temperature)
             weatherButton.setOnClickListener{
-                val intent = Intent(context,DetailsActivity::class.java)
+                val intent = Intent(context, DetailsActivity::class.java)
+                intent.putExtra("Temperature_Info",weatherLocation.text.toString())
                 context.startActivity(intent)
             }
         }
