@@ -1,8 +1,8 @@
 package com.example.weatherapp.models
 
 data class TemperatureResult(
-    var temp: Double,
-    var humidity: String,
-    var description: String,
-    var icon: String,
+    val temp: Double,
+    val humidity: String,
+    val description: String,
+    val icon: String,
 )

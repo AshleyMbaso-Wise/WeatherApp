@@ -4,8 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitHelper {
-    //val api_base_url = "https://quotable.io/"
-    val api_base_url = "https://weather.visualcrossing.com/"
+    private const val api_base_url = "https://weather.visualcrossing.com/"
 
     fun getInstance(): Retrofit{
         return Retrofit.Builder().baseUrl(api_base_url)
