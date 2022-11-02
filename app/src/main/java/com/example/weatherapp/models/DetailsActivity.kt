@@ -1,10 +1,6 @@
 package com.example.weatherapp.models
 
-import android.content.ClipDescription
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -14,52 +10,32 @@ import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.R
 import kotlinx.coroutines.*
 
-import okhttp3.Dispatcher
-import org.w3c.dom.Text
+class DetailsActivity: AppCompatActivity() {
 
-class DetailsActivity(
-    var city: String = ""
-): AppCompatActivity() {
+    private val returnButton: Button by lazy { findViewById(R.id.return_button) }
+    private val locationName: TextView by lazy { findViewById(R.id.detail_locationName)}
+    private val locationTemperature: TextView by lazy { findViewById(R.id.detail_locationTemperature)}
+    private val locationHumidity: TextView by lazy { findViewById(R.id.detail_locationHumidity)}
+    private val locationDescription: TextView by lazy { findViewById(R.id.detail_locationDescription) }
+    private val temperatureImage: ImageView by lazy { findViewById(R.id.TemperatureImage) }
 
-    private lateinit var returnButton: Button
+    private val city: String by lazy { intent.getStringExtra("Temperature_Info").toString() }
 
-    private lateinit var locationName: TextView
-    private lateinit var locationTemperature: TextView
-    private lateinit var locationHumidity: TextView
-    private lateinit var locationDescription: TextView
-    private lateinit var temperatureImage: ImageView
-    private lateinit var weatherSymbol: String
-
-    private var dataLoaded: Boolean = false
-
-    fun initialiseComponents(): Unit{
-        locationName = findViewById(R.id.detail_locationName)
-        locationTemperature = findViewById(R.id.detail_locationTemperature)
-        locationHumidity = findViewById(R.id.detail_locationHumidity)
-        locationDescription = findViewById(R.id.detail_locationDescription)
-        returnButton = findViewById(R.id.return_button)
-        temperatureImage = findViewById(R.id.TemperatureImage)
+    private fun initialiseComponentInfo(): Unit{
+        locationName.text = city
     }
 
-    fun initialiseComponentInfo(): Unit{
-        city = intent.getStringExtra("Temperature_Info").toString()
-        locationName.setText(city)
-    }
-
-    fun setComponentInfo(temperatureInfo: TemperatureResult?){
+    private fun setComponentInfo(temperatureInfo: TemperatureResult?){
         if(temperatureInfo==null){
             return
         }
-        locationHumidity.setText(temperatureInfo.humidity)
-        locationTemperature.setText(temperatureInfo.temp.toString() + " °F")
-        locationDescription.setText(temperatureInfo.description)
+        locationHumidity.text = temperatureInfo.humidity
+        locationTemperature.text = temperatureInfo.temp.toString() + " °F"
+        locationDescription.text = temperatureInfo.description
         setTemperaturePhoto(temperatureInfo.icon)
-
-        dataLoaded=true;//When the information has been updated, set this to true
     }
 
-    fun setTemperaturePhoto(weatherStatus: String){
-        Log.d("weather status", weatherStatus)
+    private fun setTemperaturePhoto(weatherStatus: String){
         when(weatherStatus){
             "clear-day" -> temperatureImage.setImageResource(R.drawable.scorpion_clear_day)
             "rain" -> temperatureImage.setImageResource(R.drawable.squirtle_rain)
@@ -69,14 +45,11 @@ class DetailsActivity(
                 temperatureImage.setImageResource(R.drawable.price)
             }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_page)
-
-        initialiseComponents()
         initialiseComponentInfo()
 
         val retrofithelper = RetrofitHelper.getInstance()
@@ -94,13 +67,11 @@ class DetailsActivity(
                 setComponentInfo(resultInfo)
                 if (result != null)
                 // Checking the results
-                    Log.d("HELLO THERE: ", result.body().toString())
+                    Log.d("Temperature Results ", result.body().toString())
         }
 
-
         returnButton.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 

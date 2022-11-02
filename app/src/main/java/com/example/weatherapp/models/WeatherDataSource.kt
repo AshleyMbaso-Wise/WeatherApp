@@ -1,44 +1,20 @@
 package com.example.weatherapp.models
 
-import com.example.weatherapp.models.WeatherPost
-
 class WeatherDataSource{
 
     companion object{
-        fun createWeatherDataSet(): ArrayList<WeatherPost>{
-            val weatherDataList = ArrayList<WeatherPost>()
-
-            weatherDataList.add(
-                WeatherPost("London", "10 Celcius", "Rain")
+        fun createWeatherDataSet(): List<WeatherPost> {
+            return listOf(
+                WeatherPost("London", "10 Celcius"),
+                WeatherPost("Rome", "20 Celcius"),
+                WeatherPost("Madrid", "15 Celcius"),
+                WeatherPost("Palermo", "30 Celcius"),
+                WeatherPost("Lagos", "20 Celcius"),
+                WeatherPost("Paris", "15 Celcius"),
+                WeatherPost("Kiev", "30 Celcius"),
+                WeatherPost("Bologna", "20 Celcius"),
+                WeatherPost("Barcelona", "40 Celcius")
             )
-
-            weatherDataList.add(
-                WeatherPost("Rome", "20 Celcius", "Sunny")
-            )
-
-            weatherDataList.add(
-                WeatherPost("Madrid", "15 Celcius", "Windy")
-            )
-
-            weatherDataList.add(
-                WeatherPost("Palermo", "30 Celcius", "Sunny")
-            )
-
-            weatherDataList.add(
-                WeatherPost("Lagos", "20 Celcius", "Sunny")
-            )
-
-            weatherDataList.add(
-                WeatherPost("Paris", "15 Celcius", "Windy")
-            )
-
-            weatherDataList.add(
-                WeatherPost("Kiyv", "30 Celcius", "Sunny")
-            )
-
-            println(weatherDataList)
-
-            return weatherDataList
         }
     }
 }
