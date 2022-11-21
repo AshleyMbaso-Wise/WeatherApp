@@ -1,6 +1,6 @@
 package com.example.weatherapp.models
 
-data class TemperatureResult(
+data class TemperatureData(
     val temp: Double,
     val humidity: String,
     val description: String,

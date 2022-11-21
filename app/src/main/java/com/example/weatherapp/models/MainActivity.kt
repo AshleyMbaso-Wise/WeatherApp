@@ -2,24 +2,34 @@ package com.example.weatherapp.models
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var weatherAdapter: WeatherListAdapter
+    private val weatherMainMenuViewModel: WeatherMainMenuViewModel by viewModels()
+
+    private val defaultList = listOf<Location>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initRecyclerView()
-        addDataSet()
+        lifecycleScope.launch{
+            setDataSet()
+            weatherMainMenuViewModel.uiState.collect { locationData ->
+                weatherAdapter.submitList(locationData.locations?: defaultList)
+            }
+        }
     }
 
-    private fun addDataSet(){
-        val data = WeatherDataSource.createWeatherDataSet()
-        weatherAdapter.submitList(data)
+    private suspend fun setDataSet(){
+        weatherMainMenuViewModel.setListOfCountries()
     }
 
     //APPLY helps with organising the code

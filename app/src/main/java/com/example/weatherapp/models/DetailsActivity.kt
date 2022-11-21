@@ -5,10 +5,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.R
 import kotlinx.coroutines.*
+
 
 class DetailsActivity: AppCompatActivity() {
 
@@ -21,21 +23,19 @@ class DetailsActivity: AppCompatActivity() {
 
     private val city: String by lazy { intent.getStringExtra("Temperature_Info").toString() }
 
-    private fun initialiseComponentInfo(): Unit{
-        locationName.text = city
+    private val detailsViewModel: WeatherDetailsViewModel by viewModels()
+
+    private fun setComponentInfo(uiState: WeatherDetailsUiState){
+        locationName.text = uiState.weatherInformation?.address
+        val latestWeatherResultIndex: Int = 0
+        val weatherInformation = uiState.weatherInformation?.days?.get(latestWeatherResultIndex)
+        locationHumidity.text = weatherInformation?.humidity
+        locationTemperature.text = weatherInformation?.temp.toString() + " °F"
+        locationDescription.text = weatherInformation?.description
+        setTemperaturePhoto(weatherInformation?.icon)
     }
 
-    private fun setComponentInfo(temperatureInfo: TemperatureResult?){
-        if(temperatureInfo==null){
-            return
-        }
-        locationHumidity.text = temperatureInfo.humidity
-        locationTemperature.text = temperatureInfo.temp.toString() + " °F"
-        locationDescription.text = temperatureInfo.description
-        setTemperaturePhoto(temperatureInfo.icon)
-    }
-
-    private fun setTemperaturePhoto(weatherStatus: String){
+    private fun setTemperaturePhoto(weatherStatus: String?){
         when(weatherStatus){
             "clear-day" -> temperatureImage.setImageResource(R.drawable.scorpion_clear_day)
             "rain" -> temperatureImage.setImageResource(R.drawable.squirtle_rain)
@@ -50,24 +50,19 @@ class DetailsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_page)
-        initialiseComponentInfo()
-
-        val retrofithelper = RetrofitHelper.getInstance()
-        val temperatureApi = retrofithelper.create(TemperatureApi::class.java)
         supportActionBar?.hide()
 
         lifecycleScope.launch {
                 /*Main thread is responsible for rendering all the frames of the screen
                     Each piece of code originally runs on the main thread
                  */
-            val result = withContext(Dispatchers.IO){
-                temperatureApi.getTemperature(city)
+            detailsViewModel.setTemperatureDetails(city)
+            detailsViewModel.uiState.collect { uiState ->
+                setComponentInfo(uiState)
+                if (uiState.weatherInformation != null){
+                    Log.d("Log", "Temperature Results: ${uiState.weatherInformation}")
+                }
             }
-                val resultInfo = result.body()?.days?.get(0)
-                setComponentInfo(resultInfo)
-                if (result != null)
-                // Checking the results
-                    Log.d("Temperature Results ", result.body().toString())
         }
 
         returnButton.setOnClickListener{
