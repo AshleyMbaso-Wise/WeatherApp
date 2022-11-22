@@ -1,5 +1,6 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.data.repository.remoterepository.apiendpoints
 
+import com.example.weatherapp.viewmodel.objects.Location
 import retrofit2.Response
 import retrofit2.http.GET
 

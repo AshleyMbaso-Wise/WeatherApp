@@ -1,9 +1,8 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.viewmodel.uistate
 
-import retrofit2.Retrofit
+import com.example.weatherapp.viewmodel.objects.LocationWeatherData
 
 data class WeatherDetailsUiState(
     val isPageLoaded: Boolean = false,
     val weatherInformation: LocationWeatherData? = null,
-    val weatherRetroFit: Retrofit? = null,
 )

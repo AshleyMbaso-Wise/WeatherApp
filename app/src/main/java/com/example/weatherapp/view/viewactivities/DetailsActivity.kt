@@ -1,7 +1,6 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.view.viewactivities
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.R
+import com.example.weatherapp.viewmodel.uistate.WeatherDetailsUiState
+import com.example.weatherapp.viewmodel.WeatherDetailsViewModel
 import kotlinx.coroutines.*
 
 
@@ -59,9 +60,6 @@ class DetailsActivity: AppCompatActivity() {
             detailsViewModel.setTemperatureDetails(city)
             detailsViewModel.uiState.collect { uiState ->
                 setComponentInfo(uiState)
-                if (uiState.weatherInformation != null){
-                    Log.d("Log", "Temperature Results: ${uiState.weatherInformation}")
-                }
             }
         }
 

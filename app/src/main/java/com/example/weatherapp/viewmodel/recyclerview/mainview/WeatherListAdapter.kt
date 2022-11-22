@@ -1,4 +1,4 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.viewmodel.recyclerview.mainview
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
+import com.example.weatherapp.viewmodel.objects.Location
+import com.example.weatherapp.view.viewactivities.DetailsActivity
 
 
 class WeatherListAdapter(

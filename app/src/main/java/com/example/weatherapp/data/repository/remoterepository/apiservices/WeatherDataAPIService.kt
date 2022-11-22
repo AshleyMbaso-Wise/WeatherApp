@@ -1,9 +1,9 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.data.repository.remoterepository.apiservices
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object WeatherDataService {
+object WeatherDataAPIService {
     private const val api_base_url = "https://weather.visualcrossing.com/"
 
     fun getInstance(): Retrofit {

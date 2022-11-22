@@ -1,4 +1,4 @@
-package com.example.weatherapp.models
+package com.example.weatherapp.view.viewactivities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,14 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
+import com.example.weatherapp.viewmodel.recyclerview.mainview.WeatherListAdapter
+import com.example.weatherapp.viewmodel.MainMenuViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var weatherAdapter: WeatherListAdapter
-    private val weatherMainMenuViewModel: WeatherMainMenuViewModel by viewModels()
-
-    private val defaultList = listOf<Location>()
+    private val MainMenuViewModel: MainMenuViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,14 +22,14 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         lifecycleScope.launch{
             setDataSet()
-            weatherMainMenuViewModel.uiState.collect { locationData ->
-                weatherAdapter.submitList(locationData.locations?: defaultList)
+            MainMenuViewModel.uiState.collect { currentWeatherState ->
+                weatherAdapter.submitList(currentWeatherState.locations?: emptyList())
             }
         }
     }
 
     private suspend fun setDataSet(){
-        weatherMainMenuViewModel.setListOfCountries()
+        MainMenuViewModel.setListOfCountries()
     }
 
     //APPLY helps with organising the code
