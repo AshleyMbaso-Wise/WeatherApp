@@ -2,11 +2,13 @@ package com.example.weatherapp.viewmodel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.repository.LocationRepository
 import com.example.weatherapp.viewmodel.uistate.WeatherMainMenuUiState
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class MainMenuViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(WeatherMainMenuUiState())
@@ -14,13 +16,19 @@ class MainMenuViewModel : ViewModel() {
 
     private val locationRepository = LocationRepository()
 
-    suspend fun setListOfCountries() {
-        val listOfCountries = locationRepository.getLocations()
-        _uiState.update { currentState ->
-            currentState.copy(
-                locations = listOfCountries?.sortedBy { location -> location.name.common },
-                isPageLoaded = true
-            )
+    init {
+        setListOfCountries()
+    }
+
+    private fun setListOfCountries() {
+        viewModelScope.launch {
+            val listOfCountries = locationRepository.getLocations()
+            _uiState.update { currentState ->
+                currentState.copy(
+                    locations = listOfCountries?.sortedBy { location -> location.name.common },
+                    isPageLoaded = true
+                )
+            }
         }
     }
 

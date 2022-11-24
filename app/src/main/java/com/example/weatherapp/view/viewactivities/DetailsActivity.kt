@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.R
 import com.example.weatherapp.viewmodel.uistate.WeatherDetailsUiState
 import com.example.weatherapp.viewmodel.WeatherDetailsViewModel
+import com.example.weatherapp.viewmodel.factories.DetailsViewModelFactory
 import kotlinx.coroutines.*
 
 
@@ -24,7 +25,32 @@ class DetailsActivity: AppCompatActivity() {
 
     private val city: String by lazy { intent.getStringExtra("Temperature_Info").toString() }
 
-    private val detailsViewModel: WeatherDetailsViewModel by viewModels()
+    private val detailsViewModel: WeatherDetailsViewModel by viewModels() { DetailsViewModelFactory(city) }
+
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details_page)
+        supportActionBar?.hide()
+
+        lifecycleScope.launch {
+            launchTemperatureCall()
+            updateUiStateDetailsComponents()
+        }
+
+        returnButton.setOnClickListener{
+            finish()
+        }
+    }
+
+    private suspend fun updateUiStateDetailsComponents(){
+        detailsViewModel.uiState.collect { uiState ->
+            setComponentInfo(uiState)
+        }
+    }
+
+    private suspend fun launchTemperatureCall(){
+        detailsViewModel.requestTemperatureDetails()
+    }
 
     private fun setComponentInfo(uiState: WeatherDetailsUiState){
         locationName.text = uiState.weatherInformation?.address
@@ -45,26 +71,6 @@ class DetailsActivity: AppCompatActivity() {
             else -> {
                 temperatureImage.setImageResource(R.drawable.price)
             }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?){
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details_page)
-        supportActionBar?.hide()
-
-        lifecycleScope.launch {
-                /*Main thread is responsible for rendering all the frames of the screen
-                    Each piece of code originally runs on the main thread
-                 */
-            detailsViewModel.setTemperatureDetails(city)
-            detailsViewModel.uiState.collect { uiState ->
-                setComponentInfo(uiState)
-            }
-        }
-
-        returnButton.setOnClickListener{
-            finish()
         }
     }
 

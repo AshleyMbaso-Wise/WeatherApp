@@ -14,22 +14,17 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var weatherAdapter: WeatherListAdapter
-    private val MainMenuViewModel: MainMenuViewModel by viewModels()
+    private val mainMenuViewModel: MainMenuViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initRecyclerView()
         lifecycleScope.launch{
-            setDataSet()
-            MainMenuViewModel.uiState.collect { currentWeatherState ->
+            mainMenuViewModel.uiState.collect { currentWeatherState ->
                 weatherAdapter.submitList(currentWeatherState.locations?: emptyList())
             }
         }
-    }
-
-    private suspend fun setDataSet(){
-        MainMenuViewModel.setListOfCountries()
     }
 
     //APPLY helps with organising the code
