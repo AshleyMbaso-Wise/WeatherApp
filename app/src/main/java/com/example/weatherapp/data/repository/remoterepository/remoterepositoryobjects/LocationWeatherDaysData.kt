@@ -5,4 +5,6 @@ data class LocationWeatherDaysData(
     val humidity: String,
     val description: String,
     val icon: String,
-)
+){
+    fun toTemperature(): String = "$temp °F"
+}

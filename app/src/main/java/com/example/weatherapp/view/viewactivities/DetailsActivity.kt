@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.weatherapp.R
 import com.example.weatherapp.viewmodel.uistate.WeatherDetailsUiState
 import com.example.weatherapp.viewmodel.WeatherDetailsViewModel
-import com.example.weatherapp.viewmodel.factories.DetailsViewModelFactory
 import kotlinx.coroutines.*
 
 
@@ -22,10 +21,7 @@ class DetailsActivity: AppCompatActivity() {
     private val locationHumidity: TextView by lazy { findViewById(R.id.detail_locationHumidity)}
     private val locationDescription: TextView by lazy { findViewById(R.id.detail_locationDescription) }
     private val temperatureImage: ImageView by lazy { findViewById(R.id.TemperatureImage) }
-
-    private val city: String by lazy { intent.getStringExtra("Temperature_Info").toString() }
-
-    private val detailsViewModel: WeatherDetailsViewModel by viewModels() { DetailsViewModelFactory(city) }
+    private val detailsViewModel: WeatherDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -33,7 +29,6 @@ class DetailsActivity: AppCompatActivity() {
         supportActionBar?.hide()
 
         lifecycleScope.launch {
-            launchTemperatureCall()
             updateUiStateDetailsComponents()
         }
 
@@ -44,20 +39,16 @@ class DetailsActivity: AppCompatActivity() {
 
     private suspend fun updateUiStateDetailsComponents(){
         detailsViewModel.uiState.collect { uiState ->
-            setComponentInfo(uiState)
+            displayComponentInfo(uiState)
         }
     }
 
-    private suspend fun launchTemperatureCall(){
-        detailsViewModel.requestTemperatureDetails()
-    }
-
-    private fun setComponentInfo(uiState: WeatherDetailsUiState){
+    private fun displayComponentInfo(uiState: WeatherDetailsUiState){
         locationName.text = uiState.weatherInformation?.address
         val latestWeatherResultIndex: Int = 0
         val weatherInformation = uiState.weatherInformation?.days?.get(latestWeatherResultIndex)
         locationHumidity.text = weatherInformation?.humidity
-        locationTemperature.text = weatherInformation?.temp.toString() + " °F"
+        locationTemperature.text = weatherInformation?.toTemperature()
         locationDescription.text = weatherInformation?.description
         setTemperaturePhoto(weatherInformation?.icon)
     }

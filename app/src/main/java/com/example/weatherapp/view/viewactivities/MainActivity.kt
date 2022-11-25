@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         weatherData_recyclerView.layoutManager/weatherAdapter/adapter
 
         I can change properties within apply
-
      */
     private fun initRecyclerView(){
         val weatherDataRV: RecyclerView = findViewById(R.id.weather_recycler_view)
